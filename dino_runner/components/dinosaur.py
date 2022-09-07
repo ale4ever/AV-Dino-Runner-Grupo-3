@@ -1,13 +1,15 @@
 import pygame
+from pygame.sprite import Sprite
 
 from dino_runner.utils.constants import DUCKING, RUNNING, JUMPING
 
 
-class Dinosaur:
+class Dinosaur(Sprite):
     X_POS = 80
     Y_POS = 310
     JUMP_VEL = 8.5
     Y_DUCKING = Y_POS + 35
+    FLAG_DUCKING = True
 
     def __init__(self):
         self.image = RUNNING[0]
@@ -19,6 +21,7 @@ class Dinosaur:
         self.dino_run = True
         self.dino_jump = False
         self.dino_duck = False
+        self.dino_duck_flag = self.FLAG_DUCKING
         self.jump_vel = self.JUMP_VEL
         self.dino_duck_y = self.dino_rect.y + 35
 
@@ -60,16 +63,32 @@ class Dinosaur:
     def jump(self):
         if self.dino_duck:
             self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1]
+            if self.dino_duck_flag:
+                self.dino_rect.y += 35
+                self.dino_duck_flag = False
         else:
             self.image = JUMPING
         self.dino_rect.y -= self.jump_vel * 4
-        self.jump_vel -= 0.8 if not self.dino_duck else 1.1
-    
-        if self.jump_vel < -self.JUMP_VEL:
-            self.dino_rect.y = self.Y_POS
+        self.jump_vel -= 0.8 if not self.dino_duck else 1.3
+
+        if self.jump_vel < -self.JUMP_VEL and self.dino_rect.y >= 350 and self.dino_duck:
+            self.dino_duck_flag = self.FLAG_DUCKING
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
+            self.dino_rect.y = self.Y_POS
+        elif self.jump_vel < -self.JUMP_VEL and not self.dino_duck: 
+            self.dino_duck_flag = self.FLAG_DUCKING
+            self.dino_jump = False
+            self.jump_vel = self.JUMP_VEL
+            self.dino_rect.y = self.Y_POS
 
+#        if self.jump_vel < -self.JUMP_VEL:
+#            if self.dino_rect.y == self.Y_POS: 
+#                self.dino_duck_flag = self.FLAG_DUCKING
+#                self.dino_jump = False
+#                self.jump_vel = self.JUMP_VEL
+#                self.dino_rect.y = self.Y_POS
+#Hacer nuevo mov "juck" para saltar y agacharse
     def duck(self):
         self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1]
         self.dino_rect.x = self.X_POS
