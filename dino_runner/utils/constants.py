@@ -75,3 +75,5 @@ DEFAULT_TYPE = "default"
 FONT_STYLE = "freesansbold.ttf"
 
 BASE_DIR = str(Path.cwd())
+
+HIGH_SCORE = 0
