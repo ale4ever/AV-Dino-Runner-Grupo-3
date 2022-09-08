@@ -11,7 +11,7 @@ class ObstacleManager:
 
     def update(self, game):
         if len(self.obstacles) == 0:
-            random_choice = 0#random.randint(0, 2)
+            random_choice = random.randint(0, 2)
             if random_choice == 1:
                     self.obstacles.append(Cactus("Small"))
             elif random_choice == 2:
