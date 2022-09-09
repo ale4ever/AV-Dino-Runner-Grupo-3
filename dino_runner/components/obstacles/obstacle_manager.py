@@ -3,7 +3,7 @@ import pygame, random
 
 from dino_runner.components.obstacles.bird import Bird
 from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.utils.constants import SHIELD_TYPE
+from dino_runner.utils.constants import HAMMER_TYPE, INMMUNITY_TYPE, SHIELD_TYPE
 
 
 class ObstacleManager:
@@ -23,11 +23,12 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                if game.player.type != SHIELD_TYPE:
+                if game.player.type != SHIELD_TYPE and game.player.type != HAMMER_TYPE and game.player.type != INMMUNITY_TYPE:
                     pygame.time.delay(500)
                     game.playing = False
                     game.death_count += 1
                     game.score_manager.write_high_score()
+                    pygame.mixer.music.fadeout(1000)
                     break
                 else: 
                     self.obstacles.remove(obstacle)

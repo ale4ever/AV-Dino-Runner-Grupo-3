@@ -2,12 +2,13 @@
 
 from time import time
 import pygame, os, distutils.dir_util
+from dino_runner.components.boss import Boss
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.components.score_manager import ScoreManager
 
-from dino_runner.utils.constants import BASE_DIR, DEFAULT_TYPE, HIGH_SCORE, BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BASE_DIR, BGM_FILE, DEFAULT_TYPE, HAMMER_TYPE, HIGH_SCORE, BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
 
 class Game:
@@ -27,10 +28,16 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.score_manager = ScoreManager()
         self.power_up_manager = PowerUpManager()
+        self.boss = Boss()
 
         self.running = False
         self.score = self.score_manager.score
         self.death_count = 0
+        self.boss_fighting = False
+
+        pygame.mixer.pre_init(44100, 16, 2, 4096)
+        pygame.mixer.init
+        pygame.mixer.music.load(BGM_FILE)
 
 
     def execute(self):
@@ -56,13 +63,16 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+                pygame.mixer.music.fadeout(1000)
 
     def update(self):
         self.game_speed = self.score_manager.update_score(self.game_speed)
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
-        self.power_up_manager.update(self.score, self.game_speed, self.player)
+        self.power_up_manager.update(self.score_manager.score, self.game_speed, self.player, self)
+        self.boss.update(self, self.score_manager.score)
+        
 
 
 
@@ -77,6 +87,10 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
+        if self.boss_fighting:
+            self.boss.draw(self.screen)
+        if self.player.is_hammer:
+            self.player.draw_hammer_attack(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -95,6 +109,7 @@ class Game:
                 self.playing = False
                 self.running = False
             elif event.type == pygame.KEYDOWN:
+                self.play_bgm()
                 self.run()
 
     def draw_score(self):
@@ -139,15 +154,23 @@ class Game:
 
     def draw_power_up_time(self):
         if self.player.has_power_up:
-            time_to_show = round((self.player.power_up_time_up - pygame.time.get_ticks()) / 1000, 2)
+            time_to_show = round((self.player.power_up_time_up - pygame.time.get_ticks()) / 1000, 1)
             if time_to_show >= 0:
-                self.draw_text(f"{self.player.type.capitalize()} enabled for {time_to_show} seconds", pos = [500, 40])
+                self.draw_text(f"{self.player.type.capitalize()} enabled for {time_to_show} seconds", pos = [10, 60])
+                if self.player.type == HAMMER_TYPE:
+                    self.draw_text("Use [Spacebar] to throw!", pos = [10, SCREEN_HEIGHT - 40])
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE
 
     def reset_game(self):
         self.obstacle_manager.reset_obstacles()
+        self.boss.reset_values(self)
         self.power_up_manager.reset_power_ups()
-        self.score = 0
+        self.score_manager.score = 0
         self.game_speed = 20
+        self.boss_fighting = False
+
+    def play_bgm(self):
+        pygame.mixer.music.play(loops = -1, fade_ms = 0)
+    

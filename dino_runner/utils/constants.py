@@ -17,19 +17,25 @@ RUNNING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
 ]
 
+RUNNING_INMUNE = [
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Inmune.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2Inmune.png")),
+]
+
 RUNNING_SHIELD = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Shield.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2Shield.png")),
 ]
 
 RUNNING_HAMMER = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Hammer.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2Hammer.png")),
 ]
 
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
 JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
 JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
+JUMPING_INMUNE = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpInmune.png"))
 
 DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1.png")),
@@ -44,6 +50,11 @@ DUCKING_SHIELD = [
 DUCKING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2Hammer.png")),
+]
+
+DUCKING_INMUNE = [
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Inmune.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2Inmune.png")),
 ]
 
 SMALL_CACTUS = [
@@ -65,6 +76,10 @@ BIRD = [
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
+TELEPORT = pygame.image.load(os.path.join(IMG_DIR, 'Other/Portal.png'))
+
+UNFLIP_BOSS = pygame.image.load(os.path.join(IMG_DIR, 'Other/boss.png'))
+BOSS_IMG = pygame.transform.flip(UNFLIP_BOSS, True, False)
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
@@ -79,3 +94,7 @@ BASE_DIR = str(Path.cwd())
 HIGH_SCORE = 0
 
 SHIELD_TYPE = "shield"
+HAMMER_TYPE = "hammer"
+INMMUNITY_TYPE = "inmune"
+
+BGM_FILE = os.path.join(BASE_DIR + "\\dino_runner\\assets\\Other\\main_bgm.mp3")
