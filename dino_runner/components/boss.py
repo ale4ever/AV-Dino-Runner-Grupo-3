@@ -38,8 +38,6 @@ class Boss(Sprite):
         else:
             game.boss_fighting = False
 
-
-
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, 130 - self.rect.y))
         text = f"HP: {self.life}/100"

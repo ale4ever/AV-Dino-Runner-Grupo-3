@@ -16,7 +16,7 @@ class Dinosaur(Sprite):
     FLAG_DUCKING = True
 
     def __init__(self):
-        self.type = DEFAULT_TYPE
+        self.type = DEFA
         self.image = RUNNING[0]
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
@@ -56,15 +56,10 @@ class Dinosaur(Sprite):
             self.hammer_attack()
 
         if user_input[pygame.K_DOWN] and self.dino_jump:
-            self.dino_jump = True
-            self.dino_duck = False
-            self.dino_run = False
-            self.dino_juck = True
+            self.jucking()
         
         elif user_input[pygame.K_UP] and not self.dino_jump:
-            self.dino_jump = True
-            self.dino_duck = False
-            self.dino_run = False
+            self.set_jumping()
 
         elif user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_run = False
@@ -80,7 +75,6 @@ class Dinosaur(Sprite):
 
         if self.step_index >= 9:
             self.step_index = 0
-        self.hammer_update()
 
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index//5]
@@ -133,18 +127,6 @@ class Dinosaur(Sprite):
         if self.is_hammer:
             self.hammer_rect.x += 15
 
-    def hammer_update(self):
-        if self.type != HAMMER_TYPE:
-            self.has_power_up = False
-            self.power_up_time_up = 0
-        elif self.type == HAMMER_TYPE:
-            self.has_power_up = True
-
-
-                  
-
-
-
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
@@ -152,3 +134,13 @@ class Dinosaur(Sprite):
     def draw_hammer_attack(self, screen):
         screen.blit(self.hammer_img, (self.hammer_rect.x, self.hammer_rect.y))
         
+    def jucking(self):
+        self.dino_jump = True
+        self.dino_duck = False
+        self.dino_run = False
+        self.dino_juck = True
+
+    def set_jumping(self):
+        self.dino_jump = True
+        self.dino_duck = False
+        self.dino_run = False

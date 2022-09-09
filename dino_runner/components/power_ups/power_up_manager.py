@@ -14,7 +14,7 @@ class PowerUpManager():
     def generate_power_up(self, score, boss_fighting):
         if len(self.power_ups) == 0 and self.when_appears == score:
             self.when_appears = score + random.randint(200, 300)
-            choice = 1#random.randint(0,1)
+            choice = random.randint(0,1)
             if boss_fighting:
                 self.power_ups.append(Hammer())
             elif choice == 0:
@@ -35,7 +35,10 @@ class PowerUpManager():
                 self.power_ups.remove(power_up)
                 player.has_power_up = True
                 player.type = power_up.type
-                player.power_up_time_up = power_up.start_time + (power_up.duration * 1000)
+                if power_up.type == INMMUNITY_TYPE:
+                    player.power_up_time_up = power_up.start_time + (random.randint(2,4) * 1000)
+                else:
+                    player.power_up_time_up = power_up.start_time + (power_up.duration * 1000)
 
                 
 
