@@ -77,3 +77,5 @@ FONT_STYLE = "freesansbold.ttf"
 BASE_DIR = str(Path.cwd())
 
 HIGH_SCORE = 0
+
+SHIELD_TYPE = "shield"
